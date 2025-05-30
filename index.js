@@ -3,8 +3,8 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
-// index.tsx - Lógica del Frontend para el Filtro de ROMs (Versión 7.4 - Ajuste orden regiones por defecto)
-console.log("index.tsx: Script cargado. Versión 7.4 - Ajuste orden regiones por defecto. POR FAVOR, LIMPIE CACHÉ Y REVISE LA CONSOLA DEL NAVEGADOR.");
+// index.tsx - Lógica del Frontend para el Filtro de ROMs (Versión 7.6 - UI sin numeración)
+console.log("index.tsx: Script cargado. Versión 7.6 - UI sin numeración. POR FAVOR, LIMPIE CACHÉ Y REVISE LA CONSOLA DEL NAVEGADOR.");
 // --- Constantes y Datos por Defecto ---
 // Standardized to UPPERCASE for consistency in matching and configuration
 const ALL_EXCLUDABLE_TAGS = ["DEMO", "BETA", "PROTO", "UNL", "AFTERMARKET", "AUTO DEMO", "BIOS", "PROGRAM"];
@@ -33,6 +33,7 @@ function getDefaultConfig() {
 }
 let currentConfig = getDefaultConfig();
 let romFileContent = null;
+let originalInputFileName = null; // Para guardar el nombre del archivo de entrada
 let simulacionResultados = { salvados: [], eliminados: [], mapa_url: {} };
 let selectedItemElement = null;
 // --- Constantes para Parseo ---
@@ -588,21 +589,17 @@ function handleFileSelect(event) {
     const target = event.target;
     const file = target.files?.[0];
     if (file && filePathDisplay && statusLabel) {
+        originalInputFileName = file.name; // Guardar nombre del archivo original
         filePathDisplay.textContent = `Leyendo archivo: ${file.name}...`;
         statusLabel.textContent = `Procesando ${file.name}...`;
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
                 const lines = e.target?.result?.toString().split('\n').map(line => line.trim()).filter(line => line) || [];
-                // Pre-parse all ROMs on file load for efficiency if needed later, or parse on demand.
-                // For now, parsing on demand in simular_filtro_js is fine.
-                // We store name and URL, and parse 'name' when simular_filtro_js is called.
                 romFileContent = lines.map(line => {
                     const parts = line.split('=');
                     const name = parts[0].trim();
                     const url = parts.length > 1 ? parts.slice(1).join('=').trim() : undefined;
-                    // Do not parse here to save initial load time for large files.
-                    // Parsing will happen in simular_filtro_js.
                     return { originalLine: line, name, url };
                 });
                 filePathDisplay.textContent = `Archivo: ${file.name} (${romFileContent.length} líneas leídas)`;
@@ -620,6 +617,7 @@ function handleFileSelect(event) {
                 if (filePathDisplay)
                     filePathDisplay.textContent = "Error al procesar el archivo.";
                 romFileContent = null;
+                originalInputFileName = null;
                 if (btnPrevisualizar)
                     btnPrevisualizar.disabled = true;
             }
@@ -629,6 +627,7 @@ function handleFileSelect(event) {
             if (filePathDisplay)
                 filePathDisplay.textContent = "Error al leer el archivo.";
             romFileContent = null;
+            originalInputFileName = null;
             if (btnPrevisualizar)
                 btnPrevisualizar.disabled = true;
         };
@@ -638,6 +637,7 @@ function handleFileSelect(event) {
         if (filePathDisplay)
             filePathDisplay.textContent = "Ningún archivo seleccionado.";
         romFileContent = null;
+        originalInputFileName = null;
         if (btnPrevisualizar)
             btnPrevisualizar.disabled = true;
     }
@@ -713,7 +713,7 @@ async function previsualizarFiltro() {
     finally {
         if (btnPrevisualizar) {
             btnPrevisualizar.disabled = false;
-            btnPrevisualizar.innerHTML = "3. Previsualizar Filtro";
+            btnPrevisualizar.innerHTML = "Previsualizar Filtro";
         }
     }
 }
@@ -776,9 +776,18 @@ function generarArchivoFinal() {
         .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
         .join('\n');
     const blob = new Blob([contenidoFinal + '\n'], { type: 'text/plain;charset=utf-8' });
-    const date = new Date();
-    const timestamp = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}`;
-    const filename = `FiltroRomsWeb_${timestamp}.txt`;
+    let filename = "FiltroRomsWeb_filtered.txt"; // Nombre por defecto
+    if (originalInputFileName) {
+        const lastDotIndex = originalInputFileName.lastIndexOf('.');
+        const baseName = (lastDotIndex > -1) ? originalInputFileName.substring(0, lastDotIndex) : originalInputFileName;
+        filename = `${baseName}_filtered.txt`;
+    }
+    else {
+        // Si originalInputFileName es null, usamos un timestamp para asegurar unicidad como fallback.
+        const date = new Date();
+        const timestamp = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}`;
+        filename = `FiltroRomsWeb_${timestamp}_filtered.txt`;
+    }
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = filename;
@@ -920,4 +929,4 @@ document.addEventListener('DOMContentLoaded', () => {
             customMessageBox.style.display = 'none'; });
     console.log("DOMContentLoaded: Listeners configurados. App lista.");
 });
-console.log("index.tsx: Fin del script. Versión 7.4.");
+console.log("index.tsx: Fin del script. Versión 7.6.");

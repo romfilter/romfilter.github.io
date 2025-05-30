@@ -1,0 +1,6 @@
+{
+  "name": "Filtro de Roms",
+  "description": "Filtrador de Roms para evitar duplicados y simplificar listas de Roms",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

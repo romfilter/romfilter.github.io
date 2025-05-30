@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 
-// index.tsx - Lógica del Frontend para el Filtro de ROMs (Versión 7.3 - Mejorada lógica de versiones/revisiones)
-console.log("index.tsx: Script cargado. Versión 7.3 - Mejorada lógica de versiones/revisiones. POR FAVOR, LIMPIE CACHÉ Y REVISE LA CONSOLA DEL NAVEGADOR.");
+// index.tsx - Lógica del Frontend para el Filtro de ROMs (Versión 7.4 - Ajuste orden regiones por defecto)
+console.log("index.tsx: Script cargado. Versión 7.4 - Ajuste orden regiones por defecto. POR FAVOR, LIMPIE CACHÉ Y REVISE LA CONSOLA DEL NAVEGADOR.");
 
 // --- Constantes y Datos por Defecto ---
 // Standardized to UPPERCASE for consistency in matching and configuration
@@ -24,7 +24,8 @@ const DEFAULT_REGION_EXCL_STATES: BooleanStates = {
     'Japan': true, 'Korea': true, 'Asia': true, 'China': true, 
     'Brazil': true, 'Russia': true, 'Taiwan': true
 };
-const DEFAULT_REGIONS_ORDER: string[] = ["Spain", "France", "Germany", "Europe", "World", "USA", "Japan", "Korea", "Asia", "China", "Brazil", "Russia", "Taiwan"];
+// Nuevo orden por defecto para regiones preferidas
+const DEFAULT_REGIONS_ORDER: string[] = ["Spain", "Europe", "World", "USA", "France", "Germany", "Japan", "Korea", "Asia", "China", "Brazil", "Russia", "Taiwan"];
 
 
 // --- Tipos para la Configuración y ROMs ---
@@ -987,4 +988,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("DOMContentLoaded: Listeners configurados. App lista.");
 });
 
-console.log("index.tsx: Fin del script. Versión 7.3.");
+console.log("index.tsx: Fin del script. Versión 7.4.");

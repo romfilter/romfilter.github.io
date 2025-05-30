@@ -3,8 +3,8 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
-// index.tsx - Lógica del Frontend para el Filtro de ROMs (Versión 7.3 - Mejorada lógica de versiones/revisiones)
-console.log("index.tsx: Script cargado. Versión 7.3 - Mejorada lógica de versiones/revisiones. POR FAVOR, LIMPIE CACHÉ Y REVISE LA CONSOLA DEL NAVEGADOR.");
+// index.tsx - Lógica del Frontend para el Filtro de ROMs (Versión 7.4 - Ajuste orden regiones por defecto)
+console.log("index.tsx: Script cargado. Versión 7.4 - Ajuste orden regiones por defecto. POR FAVOR, LIMPIE CACHÉ Y REVISE LA CONSOLA DEL NAVEGADOR.");
 // --- Constantes y Datos por Defecto ---
 // Standardized to UPPERCASE for consistency in matching and configuration
 const ALL_EXCLUDABLE_TAGS = ["DEMO", "BETA", "PROTO", "UNL", "AFTERMARKET", "AUTO DEMO", "BIOS", "PROGRAM"];
@@ -18,7 +18,8 @@ const DEFAULT_REGION_EXCL_STATES = {
     'Japan': true, 'Korea': true, 'Asia': true, 'China': true,
     'Brazil': true, 'Russia': true, 'Taiwan': true
 };
-const DEFAULT_REGIONS_ORDER = ["Spain", "France", "Germany", "Europe", "World", "USA", "Japan", "Korea", "Asia", "China", "Brazil", "Russia", "Taiwan"];
+// Nuevo orden por defecto para regiones preferidas
+const DEFAULT_REGIONS_ORDER = ["Spain", "Europe", "World", "USA", "France", "Germany", "Japan", "Korea", "Asia", "China", "Brazil", "Russia", "Taiwan"];
 // --- Referencias a Elementos del DOM ---
 let tagsCheckboxesContainer, regionesExcluirCheckboxesContainer, rvRegionesContainer, rvIdiomasContainer, rvSalvadosContainer, rvEliminadosContainer, btnRegionUp, btnRegionDown, btnIdiomaUp, btnIdiomaDown, btnPrevisualizar, btnMoverAEliminados, btnMoverASalvados, btnGenerarFinal, fileInput, filePathDisplay, labelSalvados, labelEliminados, statusLabel, customMessageBox, customMessageText, customMessageButton;
 // --- Estado de la Aplicación ---
@@ -919,4 +920,4 @@ document.addEventListener('DOMContentLoaded', () => {
             customMessageBox.style.display = 'none'; });
     console.log("DOMContentLoaded: Listeners configurados. App lista.");
 });
-console.log("index.tsx: Fin del script. Versión 7.3.");
+console.log("index.tsx: Fin del script. Versión 7.4.");
